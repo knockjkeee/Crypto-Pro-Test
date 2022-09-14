@@ -87,7 +87,7 @@ class ConnectionGOST {
         String input;
         while ((input = br.readLine()) != null) {
             sb.append(input);
-            sb.append("\n");
+            sb.append(System.lineSeparator());
         }
         br.close();
         return sb.toString();
