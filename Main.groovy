@@ -58,9 +58,7 @@ class ConnectionGOST {
         }
     }
 
-    String connect(SSLSocketFactory factory,
-                   String urlPath) throws Exception {
-
+    String connect(SSLSocketFactory factory, String urlPath) throws Exception {
         URL url = new URL(urlPath);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setSSLSocketFactory(factory);
@@ -71,14 +69,12 @@ class ConnectionGOST {
     }
 
 
-    String printContent(HttpsURLConnection connection)
-            throws Exception {
-        String response = null;
+    String printContent(HttpsURLConnection connection) throws Exception {
         if (connection != null) {
 
-            response = printStream(connection.getInputStream());
+            return printStream(connection.getInputStream());
         }
-        return response;
+        return "";
     }
 
     String printStream(InputStream inputStream) throws Exception {
@@ -95,27 +91,27 @@ class ConnectionGOST {
 }
 
 def addCert(String cer, String type, String pass, String store, String named) throws Exception {
-    CertificateFactory var5 = CertificateFactory.getInstance("X509");
-    Certificate var6 = var5.generateCertificate(new BufferedInputStream(new FileInputStream(cer)));
-    KeyStore var7 = KeyStore.getInstance(type);
-    char[] var8 = null;
+    CertificateFactory factory = CertificateFactory.getInstance("X509");
+    Certificate certificate = factory.generateCertificate(new BufferedInputStream(new FileInputStream(cer)));
+    KeyStore keyStore = KeyStore.getInstance(type);
+    char[] tempPass = null;
     if (!"null".equalsIgnoreCase(pass)) {
-        var8 = pass.toCharArray();
+        tempPass = pass.toCharArray();
     }
 
-    FileInputStream var9 = null;
+    FileInputStream tempVal1 = null;
     if (!"null".equalsIgnoreCase(store)) {
-        var9 = new FileInputStream(store);
+        tempVal1 = new FileInputStream(store);
     }
 
-    var7.load(var9, var8);
-    var7.setCertificateEntry(named, var6);
-    FileOutputStream var10 = null;
+    keyStore.load(tempVal1, tempPass);
+    keyStore.setCertificateEntry(named, certificate);
+    FileOutputStream tempVal2 = null;
     if (!"null".equalsIgnoreCase(store)) {
-        var10 = new FileOutputStream(store);
+        tempVal2 = new FileOutputStream(store);
     }
 
-    var7.store(var10, var8);
+    keyStore.store(tempVal2, tempPass);
 }
 
 String cer = "/Users/knockjkeee/Downloads/cert/certnew.cer";
